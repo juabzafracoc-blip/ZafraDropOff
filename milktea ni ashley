@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Bliss - Milk Tea</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Poppins',sans-serif;color:#333;line-height:1.6;background:#f8f9fa}
+        .navbar{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.98);backdrop-filter:blur(10px);z-index:1000;padding:1rem 0;box-shadow:0 2px 20px rgba(0,0,0,0.1)}
+        .nav-container{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center}
+        .logo{font-size:1.8rem;font-weight:700;background:linear-gradient(135deg,#ff6b9d,#c44569);-webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer}
+        .nav-menu{display:flex;list-style:none;gap:1.5rem}.nav-link{color:#333;text-decoration:none;font-weight:500;padding:.5rem 1rem;border-radius:20px;transition:all .3s}
+        .nav-link:hover{color:#ff6b9d;background:rgba(255,107,157,0.1)}
+        .mobile-menu-btn{display:none;background:none;border:none;font-size:1.5rem;color:#ff6b9d;cursor:pointer;padding:.5rem;border-radius:50%;transition:all .3s}
+        .mobile-menu-btn:hover{background:rgba(255,107,157,0.1);transform:scale(1.1)}
+        .cart-icon{position:relative;font-size:1.5rem;color:#ff6b9d;cursor:pointer;padding:.5rem;border-radius:50%;transition:all .3s}
+        .cart-icon:hover{background:rgba(255,107,157,0.1);transform:scale(1.1)}
+        .cart-count{position:absolute;top:-5px;right:-5px;background:#ff6b9d;color:white;border-radius:50%;width:18px;height:18px;font-size:.75rem;display:flex;align-items:center;justify-content:center;font-weight:600}
+        .mobile-menu{position:fixed;top:80px;left:0;width:100%;background:rgba(255,255,255,0.98);backdrop-filter:blur(20px);box-shadow:0 5px 20px rgba(0,0,0,0.1);transform:translateY(-100%);transition:transform .4s ease;z-index:999}
+        .mobile-menu.active{transform:translateY(0)}.mobile-nav-list{list-style:none;padding:1rem 2rem}.mobile-nav-link{display:block;color:#333;text-decoration:none;font-weight:500;padding:1rem;border-radius:15px;margin-bottom:.5rem;transition:all .3s}
+        .mobile-nav-link:hover{color:#ff6b9d;background:rgba(255,107,157,0.1)}
+        .hero{height:100vh;background:linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%);display:flex;align-items:center;justify-content:center;text-align:center;color:white;position:relative;margin-top:80px}
+        .hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle fill="white" opacity="0.1" cx="20" cy="20" r="8"/><circle fill="white" opacity="0.1" cx="80" cy="30" r="6"/><circle fill="white" opacity="0.1" cx="40" cy="80" r="10"/></svg>');animation:float 20s infinite}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+        .hero-content{max-width:700px;z-index:1}.hero h1{font-size:3.5rem;font-weight:700;margin-bottom:1rem;text-shadow:0 4px 20px rgba(0,0,0,0.3)}
+        .hero p{font-size:1.3rem;margin-bottom:2rem;opacity:.95}
+        .cta-button{background:linear-gradient(135deg,#ff6b9d,#c44569);color:white;padding:1.2rem 3rem;border-radius:50px;font-size:1.1rem;font-weight:600;text-decoration:none;display:inline-block;transition:all .3s;box-shadow:0 10px 30px rgba(255,107,157,0.4)}
+        .cta-button:hover{transform:translateY(-5px);box-shadow:0 20px 40px rgba(255,107,157,0.5)}
+        .container{max-width:1200px;margin:0 auto;padding:0 2rem}.section{padding:5rem 0}.section-title{text-align:center;font-size:2.8rem;font-weight:700;margin-bottom:1.5rem;background:linear-gradient(135deg,#ff6b9d,#c44569);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:2rem}
+        .drink-card{background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-radius:25px;padding:2rem;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,0.1);transition:all .4s;border:1px solid rgba(255,255,255,0.3)}
+        .drink-card:hover{transform:translateY(-15px);box-shadow:0 30px 60px rgba(0,0,0,0.2)}
+        .drink-image{width:100%;height:200px;object-fit:cover;border-radius:20px;margin-bottom:1rem;box-shadow:0 10px 30px rgba(0,0,0,0.2)}
+        .drink-name{font-size:1.6rem;font-weight:600;margin-bottom:.5rem}.drink-price{font-size:2rem;font-weight:700;color:#ff6b9d;margin-bottom:1rem}
+        .select-custom{width:100%;padding:1rem;border:2px solid #f0f0f0;border-radius:15px;margin-bottom:1rem;font-family:inherit;transition:all .3s}
+        .select-custom:focus{outline:none;border-color:#ff6b9d;box-shadow:0 0 0 3px rgba(255,107,157,0.1)}
+        .add-cart-btn{width:100%;background:linear-gradient(135deg,#ff6b9d,#c44569);color:white;border:none;padding:1.2rem;border-radius:25px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all .3s}
+        .add-cart-btn:hover{transform:translateY(-3px);box-shadow:0 15px 30px rgba(255,107,157,0.4)}
+        .cart-sidebar{position:fixed;right:-400px;top:0;width:400px;height:100vh;background:rgba(255,255,255,0.98);backdrop-filter:blur(20px);box-shadow:-10px 0 40px rgba(0,0,0,0.1);transition:right .4s;z-index:2000;padding:2rem;overflow-y:auto}
+        .cart-sidebar.active{right:0}
+        .cart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;padding-bottom:1rem;border-bottom:2px solid #f0f0f0}
+        .cart-title{font-size:1.6rem;font-weight:600}.close-cart{background:none;border:none;font-size:1.4rem;color:#999;cursor:pointer;padding:.5rem;border-radius:50%;transition:all .3s}
+        .close-cart:hover{background:#f0f0f0;color:#ff6b9d}
+        .cart-item{display:flex;gap:1rem;padding:1.5rem 0;border-bottom:1px solid #f0f0f0}
+        .cart-item div:first-child{width:50px;height:50px;background:#f0f0f0;border-radius:10px}
+        .cart-total{margin-top:2rem;padding-top:2rem;border-top:3px solid #ff6b9d;text-align:center}
+        .total-amount{font-size:2rem;font-weight:700;color:#ff6b9d;margin-bottom:1.5rem}
+        .checkout-btn{width:100%;background:linear-gradient(135deg,#4ecdc4,#44a08d);color:white;border:none;padding:1.5rem;border-radius:25px;font-size:1.2rem;font-weight:600;cursor:pointer;transition:all .3s}
+        .checkout-btn:hover{transform:translateY(-3px);box-shadow:0 15px 30px rgba(78,205,196,0.4)}
+        .checkout-modal,.success-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);z-index:3000;align-items:center;justify-content:center;padding:2rem}
+        .checkout-modal.active,.success-modal.active{display:flex}
+        .checkout-content{background:white;border-radius:25px;padding:2.5rem;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 30px 60px rgba(0,0,0,0.3)}
+        .form-group{margin-bottom:1.5rem}.form-group label{display:block;margin-bottom:.5rem;font-weight:500;color:#555}
+        .form-input{width:100%;padding:1rem;border:2px solid #f0f0f0;border-radius:12px;font-family:inherit;transition:all .3s}
+        .form-input:focus{outline:none;border-color:#ff6b9d;box-shadow:0 0 0 3px rgba(255,107,157,0.1)}
+        .payment-group{display:none;margin-top:.8rem}.payment-group.active{display:block}
+        .order-btn{width:100%;background:linear-gradient(135deg,#ff6b9d,#c44569);color:white;border:none;padding:1.2rem;border-radius:25px;font-size:1.1rem;font-weight:600;cursor:pointer;margin-top:1rem;transition:all .3s}
+        .order-btn:hover{transform:translateY(-3px);box-shadow:0 15px 30px rgba(255,107,157,0.4)}
+        .success-content{background:white;border-radius:25px;padding:3rem 2.5rem;text-align:center;max-width:450px;width:90%;box-shadow:0 30px 60px rgba(0,0,0,0.3);animation:bounce .6s}
+        @keyframes bounce{0%{transform:scale(0.3);opacity:0}50%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+        .thank-you-gif{width:160px;height:160px;margin-bottom:1.5rem;border-radius:20px;box-shadow:0 15px 40px rgba(0,0,0,0.2)}
+        .success-title{font-size:2rem;font-weight:700;color:#333;margin-bottom:1rem}
+        .about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2.5rem;margin-top:2rem}
+        .about-card{text-align:center;padding:2.5rem;background:rgba(255,255,255,0.9);border-radius:20px;box-shadow:0 15px 35px rgba(0,0,0,0.1);transition:all .3s}
+        .about-card:hover{transform:translateY(-10px);box-shadow:0 25px 50px rgba(0,0,0,0.15)}
+        .about-icon{font-size:3rem;background:linear-gradient(135deg,#ff6b9d,#c44569);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;margin-bottom:1rem}
+        @media (max-width:768px){.nav-menu{display:none}.mobile-menu-btn{display:block}.hero{margin-top:100px;height:90vh}.hero h1{font-size:2.5rem}.cart-sidebar{width:100%;right:-100%}.section-title{font-size:2.2rem}.menu-grid,.about-grid{grid-template-columns:1fr}}
+        body.modal-open{overflow:hidden}
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo" onclick="scrollTo('home')">🍵 Bubble Bliss</div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link" onclick="scrollTo('home');closeMobileMenu()">🏠 Home</a></li>
+                <li><a href="#menu" class="nav-link" onclick="scrollTo('menu');closeMobileMenu()">🍵 Menu</a></li>
+                <li><a href="#about" class="nav-link" onclick="scrollTo('about');closeMobileMenu()">ℹ️ About</a></li>
+                <li><a href="#contact" class="nav-link" onclick="scrollTo('contact');closeMobileMenu()">📞 Contact</a></li>
+            </ul>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+            <div class="cart-icon" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </div>
+    </nav>
+    <div id="mobileMenu" class="mobile-menu">
+        <ul class="mobile-nav-list">
+            <li><a href="#home" class="mobile-nav-link" onclick="scrollTo('home');closeMobileMenu()">🏠 Home</a></li>
+            <li><a href="#menu" class="mobile-nav-link" onclick="scrollTo('menu');closeMobileMenu()">🍵 Menu</a></li>
+            <li><a href="#about" class="mobile-nav-link" onclick="scrollTo('about');closeMobileMenu()">ℹ️ About</a></li>
+            <li><a href="#contact" class="mobile-nav-link" onclick="scrollTo('contact');closeMobileMenu()">📞 Contact</a></li>
+        </ul>
+    </div>
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>🍵 Bubble Tea<br>Delivered Fast!</h1>
+            <p>Premium milk teas with fresh toppings. Order now!</p>
+            <a href="#menu" class="cta-button" onclick="scrollTo('menu')">Order Now</a>
+        </div>
+    </section>
+    <section id="menu" class="section">
+        <div class="container">
+            <h2 class="section-title">Our Delicious Menu</h2>
+            <div class="menu-grid">
+                <div class="drink-card" data-name="Classic Milk Tea" data-price="129">
+                    <img src="https://th.bing.com/th/id/OIP.NvYj3r8-xNz7tH5LXmQDXgHaCJ?w=280&h=101&c=7&r=0&o=7&pid=1.7" alt="Classic Milk Tea" class="drink-image">
+                    <h3 class="drink-name">Classic Milk Tea</h3>
+                    <div class="drink-price">₱<span class="price-display">129</span></div>
+                    <select class="select-custom size-select" onchange="updatePrice(this)"><option value="0">Regular</option><option value="30">Large (+₱30)</option></select>
+                    <select class="select-custom topping-select" multiple size="2" onchange="updatePrice(this)"><option value="25">🧋 Tapioca (+₱25)</option><option value="30">🍮 Pudding (+₱30)</option></select>
+                    <button class="add-cart-btn" onclick="addToCart(this)">➕ Add to Cart</button>
+                </div>
+                <div class="drink-card" data-name="Matcha Milk Tea" data-price="139">
+                    <img src="https://png.pngtree.com/background/20210714/original/pngtree-matcha-milk-tea-green-background-picture-image_1240876.jpg" alt="Matcha Milk Tea" class="drink-image">
+                    <h3 class="drink-name">Matcha Milk Tea</h3>
+                    <div class="drink-price">₱<span class="price-display">139</span></div>
+                    <select class="select-custom size-select" onchange="updatePrice(this)"><option value="0">Regular</option><option value="30">Large (+₱30)</option></select>
+                    <select class="select-custom topping-select" multiple size="2" onchange="updatePrice(this)"><option value="25">🧋 Tapioca (+₱25)</option><option value="28">🥥 Coconut (+₱28)</option></select>
+                    <button class="add-cart-btn" onclick="addToCart(this)">➕ Add to Cart</button>
+                </div>
+                <div class="drink-card" data-name="Taro Milk Tea" data-price="135">
+                    <img src="https://thirstea.com/wp-content/uploads/elementor/thumbs/Taro-milk-Tea-qtbs38vrnr03zi15mrlpms6obrmfhhkjcre0xpust4.png" alt="Taro Milk Tea" class="drink-image">
+                    <h3 class="drink-name">Taro Milk Tea</h3>
+                    <div class="drink-price">₱<span class="price-display">135</span></div>
+                    <select class="select-custom size-select" onchange="updatePrice(this)"><option value="0">Regular</option><option value="30">Large (+₱30)</option></select>
+                    <select class="select-custom topping-select" multiple size="2" onchange="updatePrice(this)"><option value="25">🧋 Tapioca (+₱25)</option><option value="30">🍮 Pudding (+₱30)</option></select>
+                                        <button class="add-cart-btn" onclick="addToCart(this)">➕ Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="cartSidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h2 class="cart-title"><i class="fas fa-shopping-cart"></i> Your Cart</h2>
+            <button class="close-cart" onclick="toggleCart()">×</button>
+        </div>
+        <div id="cartItems"></div>
+        <div class="cart-total">
+            <div class="total-amount">₱<span id="cartTotal">0</span></div>
+            <button class="checkout-btn" onclick="showCheckout()">🛒 Checkout</button>
+        </div>
+    </div>
+    <div id="checkoutModal" class="checkout-modal">
+        <div class="checkout-content">
+            <h3 style="text-align:center;margin-bottom:1.5rem;color:#333;">🛒 Complete Your Order</h3>
+            <form id="checkoutForm">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" class="form-input" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" class="form-input" placeholder="09xxxxxxxxx" required>
+                </div>
+                <div class="form-group">
+                    <label>Delivery Address</label>
+                    <textarea class="form-input" rows="3" placeholder="House #, Street, Barangay, City" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <select class="form-input" id="paymentSelect" onchange="togglePaymentField()" required>
+                        <option value="">Select payment</option>
+                        <option value="cod">💰 Cash on Delivery</option>
+                        <option value="gcash">💳 GCash</option>
+                    </select>
+                    <div id="gcashField" class="payment-group">
+                        <input type="text" class="form-input" placeholder="GCash Number (09xxxxxxxxx)" id="gcashNum">
+                    </div>
+                </div>
+                <div style="background:#f8f9fa;padding:1.5rem;border-radius:15px;margin-bottom:1.5rem;text-align:center;">
+                    <strong>Order Total: ₱<span id="modalTotal">0</span></strong>
+                </div>
+                <button type="submit" class="order-btn">✅ Place Order</button>
+            </form>
+        </div>
+    </div>
+    <div id="successModal" class="success-modal">
+        <div class="success-content">
+            <img src="https://th.bing.com/th/id/OIP.8m7_s1qtzE9laLOyy6Wn-gHaHa?w=189&h=189&c=7&r=0&o=7&pid=1.7" alt="Thank You!" class="thank-you-gif">
+            <h2 class="success-title">Order Placed Successfully! 🎉</h2>
+            <p style="color:#666;margin-bottom:2rem;font-size:1.1rem;">Your order has been confirmed!</p>
+            <button class="cta-button" onclick="resetOrder()" style="margin-top:2rem;">🛒 Continue Shopping</button>
+        </div>
+    </div>
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">About Bubble Bliss</h2>
+            <p style="text-align:center;font-size:1.2rem;color:#666;max-width:700px;margin:0 auto 4rem;">Bubble Bliss is an online milk tea shop dedicated to serving delicious and refreshing drinks. We provide fast, convenient ordering with quality ingredients and unique flavors.</p>
+            <div class="about-grid">
+                <div class="about-card">
+                    <span class="about-icon">🏪</span>
+                    <h3>Our Business</h3>
+                    <p>We offer a variety of milk tea flavors made with high-quality ingredients and customizable toppings.</p>
+                </div>
+                <div class="about-card">
+                    <span class="about-icon">🎯</span>
+                    <h3>Our Mission</h3>
+                    <p>To provide fast, convenient, and satisfying milk tea experiences for every customer.</p>
+                </div>
+                <div class="about-card">
+                    <span class="about-icon">📖</span>
+                    <h3>Our Story</h3>
+                    <p>Bubble Bliss started as a simple idea to share happiness through drinks and make ordering easier online.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title">Contact Us</h2>
+            <p style="text-align:center;font-size:1.2rem;color:#666;max-width:600px;margin:0 auto 4rem;">Ready to order? We're here to help!</p>
+            <div class="about-grid">
+                <div class="about-card">
+                    <i class="fas fa-phone about-icon"></i>
+                    <h3>Call Us</h3>
+                    <p><strong>+63 912 345 6789</strong></p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-envelope about-icon"></i>
+                    <h3>Email</h3>
+                    <p><strong>hello@bubblebliss.com</strong></p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-map-marker-alt about-icon"></i>
+                    <h3>Location</h3>
+                    <p>123 Bubble St<br><strong>Manila, PH</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        let cart=[];
+        function scrollTo(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});document.getElementById('cartSidebar').classList.remove('active');closeMobileMenu();document.body.classList.remove('modal-open')}
+        function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('active')}
+        function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('active')}
+        function toggleCart(){document.getElementById('cartSidebar').classList.toggle('active');document.body.classList.toggle('modal-open');closeMobileMenu()}
+        function updatePrice(select){const card=select.closest('.drink-card'),basePrice=parseFloat(card.dataset.price),priceDisplay=card.querySelector('.price-display'),sizeSelect=card.querySelector('.size-select'),toppingSelect=card.querySelector('.topping-select');let total=basePrice+parseFloat(sizeSelect.value);Array.from(toppingSelect.selectedOptions).forEach(opt=>total+=parseFloat(opt.value));priceDisplay.textContent=Math.round(total)}
+        function addToCart(btn){const card=btn.closest('.drink-card'),name=card.dataset.name,price=parseInt(card.querySelector('.price-display').textContent),sizeSelect=card.querySelector('.size-select'),size=sizeSelect.options[sizeSelect.selectedIndex].text,toppingSelect=card.querySelector('.topping-select'),toppings=Array.from(toppingSelect.selectedOptions).map(opt=>opt.text.split(' (+')[0]).join(', ')||'None',item={id:Date.now(),name,price,size,toppings,quantity:1},existing=cart.find(i=>i.name===name&&i.size===size&&i.toppings===toppings);existing?existing.quantity++:cart.push(item);updateCartDisplay();showNotification('Added to cart! 🧋')}
+        function updateCartDisplay(){const cartItemsEl=document.getElementById('cartItems'),cartCount=document.getElementById('cartCount'),cartTotal=document.getElementById('cartTotal'),modalTotal=document.getElementById('modalTotal'),totalItems=cart.reduce((sum,i)=>sum+i.quantity,0);cartCount.textContent=totalItems;if(cart.length===0){cartItemsEl.innerHTML='<div style="text-align:center;padding:3rem;color:#999;"><i class="fas fa-shopping-cart" style="font-size:4rem;margin-bottom:1rem;color:#ddd;"></i><p>Your cart is empty</p></div>';cartTotal.textContent=modalTotal.textContent='0';return}cartItemsEl.innerHTML=cart.map(i=>`<div class="cart-item"><div style="width:50px;height:50px;background:linear-gradient(135deg,#ff6b9d,#c44569);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;">${i.name[0]}</div><div style="flex:1;"><h4 style="font-size:1rem;margin:0 0 .3rem 0;">${i.name}</h4><p style="color:#666;font-size:.85rem;margin:0 0 .5rem 0;">${i.size} | ${i.toppings}</p></div><div style="font-weight:600;color:#ff6b9d;font-size:1.1rem;">₱${(i.price*i.quantity)}</div></div>`).join('');const total=cart.reduce((sum,i)=>sum+(i.price*i.quantity),0);cartTotal.textContent=modalTotal.textContent=total}
+        function togglePaymentField(){document.getElementById('gcashField').classList.toggle('active',document.getElementById('paymentSelect').value==='gcash')}
+        function showCheckout(){cart.length===0?showNotification('Cart is empty!'): (document.getElementById('checkoutModal').classList.add('active'),document.body.classList.add('modal-open'))}
+        document.getElementById('checkoutForm').addEventListener('submit',e=>{e.preventDefault();const payment=document.getElementById('paymentSelect').value;if(payment==='gcash'&&!document.getElementById('gcashNum').value)return showNotification('Enter GCash number!');document.getElementById('checkoutModal').classList.remove('active');setTimeout(()=>{document.getElementById('successModal').classList.add('active');cart=[];updateCartDisplay();e.target.reset()},300);document.body.classList.remove('modal-open')})
+        function resetOrder(){document.getElementById('successModal').classList.remove('active');document.body.classList.remove('modal-open');scrollTo('menu')}
+        function showNotification(msg,type='success'){const toast=document.createElement('div');toast.style.cssText=`position:fixed;top:120px;right:20px;background:${type==='success'?'#4ecdc4':'#ff6b9d'};color:white;padding:1.2rem 2rem;border-radius:20px;box-shadow:0 15px 35px rgba(0,0,0,0.2);z-index:5000;font-weight:500;transform:translateX(400px);transition:all .4s;max-width:300px;`;toast.textContent=msg;document.body.appendChild(toast);setTimeout(()=>toast.style.transform='translateX(0)',100);setTimeout(()=>{toast.style.transform='translateX(400px)';setTimeout(()=>document.body.removeChild(toast),400)},2500)}
+        document.addEventListener('click',e=>{e.target.classList.contains('cart-sidebar')&&(e.target.classList.remove('active'),document.body.classList.remove('modal-open'));e.target.classList.contains('checkout-modal')&&(e.target.classList.remove('active'),document.body.classList.remove('modal-open'));e.target.classList.contains('success-modal')&&(e.target.classList.remove('active'),document.body.classList.remove('modal-open'))});
+        document.addEventListener('click',e=>{!e.target.closest('.navbar')&&!e.target.closest('#mobileMenu')&&closeMobileMenu()});
+        document.addEventListener('keydown',e=>{e.key==='Escape'&&(document.querySelectorAll('.active').forEach(el=>el.classList.remove('active')),document.body.classList.remove('modal-open'),closeMobileMenu())});
+        document.addEventListener('DOMContentLoaded',updateCartDisplay);
+    </script>
+</body>
+</html>
